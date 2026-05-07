@@ -15,6 +15,7 @@ Application/Features/
       ├── {FeatureName}Permissions.cs (Local Permissions)
       ├── {FeatureName}Profile.cs (AutoMapper)
       ├── README.md (AI generated summary)
+      ├── prompt-spec.md (Prompt-as-Code Spec for the feature)
       └── feature-manifest.json
 ```
 
@@ -41,6 +42,7 @@ Every feature MUST include this manifest. The AI agent uses this to understand b
 ```
 
 ## Implementation Checklist for Agents
+- [ ] Ensure `prompt-spec.md` is drafted and reviewed before generating the feature code.
 - [ ] Read `feature-manifest.json` before touching files.
 - [ ] Handler contains business orchestration and CQRS logic.
 - [ ] Core business rules are pushed down to Domain Services (`{Entity}Manager`).
