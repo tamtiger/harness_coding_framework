@@ -18,6 +18,10 @@ Trước khi viết code, thay đổi kiến trúc hoặc trả lời các câu 
 | Review code C# | `c#/workflows/code-review.md` |
 | Công việc C# kéo dài (Long-running) | `c#/workflows/agent-memory-workflow.md` |
 | Nghiên cứu & Lập kế hoạch (Research & Planning) | `thoughts/README.md` |
+| **Làm việc với Jira** (sync, tạo ticket, brief) | `integrations/jira.md` |
+| **Làm việc với Confluence** (sync, publish doc) | `integrations/confluence.md` |
+| **Làm việc với GitLab** (branch, commit, MR) | `integrations/gitlab.md` |
+| **Luồng liên nền tảng** (Jira ↔ Confluence ↔ GitLab) | `integrations/workflows.md` |
 
 Các rulebook của stack định nghĩa baseline về kiến trúc, ranh giới phụ thuộc (dependency boundaries), quy tắc đặt tên, testing, CI, và quy trình của agent. Các rulebook của dự án định nghĩa các quyết định đặc thù cho sản phẩm như database engine, messaging, bảo mật, observability, máy trạng thái (state machines), các adapter bên ngoài và quy trình vận hành.
 
@@ -28,6 +32,7 @@ Khi quy tắc đặc thù của dự án mâu thuẫn với quy tắc chung củ
 - `c#/`: Rulebook cơ sở cho C# / .NET / ABP Framework.
 - `c#/projects/payment-hub/`: Rulebook cho sản phẩm Payment Hub.
 - `thoughts/`: Không gian tư duy (Workspace) chứa templates cho tickets, plans, research và agent memory.
+- `integrations/`: Rulebook tích hợp với Confluence, Jira, GitLab — bao gồm quy tắc đọc/ghi, naming convention, quality gate, và workflows liên nền tảng.
 
 ## Luồng Làm Việc Của Agent (Agent Workflow)
 
@@ -46,4 +51,6 @@ Hãy sử dụng repository này như một hệ thống "Kỹ sư ngữ cảnh"
 - Không được sinh ra code chưa hoàn thiện, các bản triển khai giữ chỗ (placeholder implementations), hoặc `NotImplementedException`.
 - Không được refactor các file không liên quan hoặc vượt qua ranh giới module nếu tác vụ không yêu cầu.
 - Không được đưa ra các quyết định về cơ sở hạ tầng đặc thù của sản phẩm nếu nó không nằm trong rulebook của dự án đó.
+- **Không được tạo Jira ticket hoặc commit code lên GitLab mà không qua Quality Gate** — xem `integrations/jira.md` và `integrations/gitlab.md`.
+- **QUAN TRỌNG: TUYỆT ĐỐI KHÔNG commit code lên `main` hoặc tạo Merge Request** — luôn yêu cầu human review trước.
 - Giữ file này ngắn gọn. Các quy tắc chi tiết phải nằm trong rulebooks của stack/project, workflows, templates, hoặc các scripts mà agent có thể gọi tải theo nhu cầu (on demand).
