@@ -53,15 +53,17 @@ Sử dụng thư mục `thoughts/` cho các công việc cần lưu trữ dài h
 ```text
 thoughts/
  ├── shared/
- │    ├── 01-tickets/
- │    ├── 02-research/
- │    └── 03-plans/
+ │    ├── 01-tickets/    ← YYYYMMDD_HHMM_task-name.md
+ │    ├── 02-research/   ← YYYYMMDD_HHMM_task-name.md
+ │    └── 03-plans/      ← YYYYMMDD_HHMM_task-name.md
  └── templates/
       ├── ticket-template.md
       ├── plan-template.md
       ├── research-template.md
       └── agent-memory-template.md
 ```
+
+Tất cả file trong `shared/` phải đặt tên theo format `YYYYMMDD_HHMM_task-name.md` (ví dụ: `20260508_1335_harness-phase2-plan.md`). Chi tiết xem tại [thoughts/README.md](thoughts/README.md).
 
 Quy trình (flow) được khuyến nghị:
 
@@ -71,8 +73,9 @@ Quy trình (flow) được khuyến nghị:
 4. Đối với các tính năng C#, tạo mới hoặc cập nhật `prompt-spec.md` và `feature-manifest.json`.
 5. Chạy test (validate) và cập nhật checklist trong Plan trước khi báo xong.
 
-Kế hoạch cải tiến harness hiện tại đang được theo dõi tại
-[thoughts/shared/03-plans/harness-improvement-plan.md](thoughts/shared/03-plans/harness-improvement-plan.md).
+Kế hoạch cải tiến harness hiện tại đang được theo dõi tại:
+- Phase 1: [20260508_0931_harness-improvement-plan.md](thoughts/shared/03-plans/20260508_0931_harness-improvement-plan.md) ✅ Hoàn tất
+- Phase 2: [20260508_1335_harness-phase2-plan.md](thoughts/shared/03-plans/20260508_1335_harness-phase2-plan.md) 🔄 Đang triển khai
 
 ## Khởi Tạo Tính Năng C# (C# Feature Generation)
 
@@ -94,13 +97,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate-harness.ps1
 
 Script hiện đang kiểm tra:
 
-- File gốc `AGENTS.md`
-- `c#/README.md`
+- File gốc `AGENTS.md` và `c#/README.md`
+- **Cross-reference**: Các file được reference trong bảng routing của `AGENTS.md` phải thực sự tồn tại
 - Thư mục `thoughts/` và các file templates
 - Các file bắt buộc trong C# project rulebook
 - Định dạng và các giá trị hợp lệ của `feature-manifest.json`
 - Sự tồn tại của file `prompt-spec.md` song song với mỗi feature manifest
 - Các tiêu đề (headings) bắt buộc trong prompt specs
+- **Agent Memory**: Nếu tồn tại `AGENT_MEMORY.md`, kiểm tra các headings bắt buộc
+- **Summary output**: In chi tiết số lượng từng loại file đã kiểm tra
 
 
 ## Dành Cho Con Người (Human Usage)
@@ -113,7 +118,15 @@ Khi bạn muốn giao việc cho một AI agent:
 4. Đối với việc phát triển tính năng C#, yêu cầu agent sử dụng feature generator prompt và duy trì file `prompt-spec.md` cộng với `feature-manifest.json`.
 5. Bắt buộc agent phải chạy `scripts/validate-harness.ps1` thành công trước khi chấp nhận hoàn thành tác vụ.
 
+## Chính Sách Ngôn Ngữ (Language Policy)
+
+- **Tiếng Việt**: Dùng cho các tài liệu điều hướng cấp cao (root `README.md`, `AGENTS.md`, `thoughts/README.md`, project `README.md`).
+- **Tiếng Anh**: Dùng cho các rulebook kỹ thuật chi tiết (`architecture-rules.md`, `naming-conventions.md`, v.v.) và templates — vì các thuật ngữ kỹ thuật (technical terms) giữ nguyên tiếng Anh giúp AI agent xử lý chính xác hơn.
+
+Quy tắc này là chủ ý (intentional) nhằm cân bằng giữa khả năng đọc hiểu của con người (tiếng Việt) và độ chính xác kỹ thuật cho AI agent (tiếng Anh).
+
 ## Trạng Thái Triển Khai Hiện Tại (Current Implementation Status)
 
-Giai đoạn cải tiến harness đã được triển khai xong và đánh dấu hoàn tất trong
-`thoughts/shared/03-plans/harness-improvement-plan.md`. Script kiểm tra (Harness validation) đang pass 100% trên môi trường local.
+- **Phase 1** (cấu trúc cơ bản): Hoàn tất — `thoughts/shared/03-plans/20260508_0931_harness-improvement-plan.md`.
+- **Phase 2** (defensive hardening & agent productivity): Hoàn tất — `thoughts/shared/03-plans/20260508_1335_harness-phase2-plan.md`.
+- Script kiểm tra (Harness validation) đang pass 100% trên môi trường local.

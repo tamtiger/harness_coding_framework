@@ -49,12 +49,24 @@ Inbox records MUST include at least:
 - `Status`
 - `ExpiresAt`
 
-## Retention
-- Idempotency and webhook nonce records MUST be retained for at least 24 hours.
-- Webhook raw payloads MUST be redacted and retained according to
-  `security-rules.md`.
-- Transaction audit events MUST follow the project retention requirement in
-  `security-rules.md`.
+## Retention Summary
+
+All retention requirements consolidated from `security-rules.md` and
+`idempotency-rules.md`:
+
+| Data Type | Minimum Retention | Source Rule |
+| --- | --- | --- |
+| Transaction audit events | 5 years | `security-rules.md` |
+| Audit logs | 5 years | `security-rules.md` |
+| Transaction metadata | 5 years | `security-rules.md` |
+| Customer PII | Per tenant contract | `security-rules.md` |
+| Webhook raw payloads | 90 days (redacted) | `security-rules.md` |
+| Idempotency keys (Inbox) | 24 hours minimum | `idempotency-rules.md` |
+| Webhook nonce records | 24 hours minimum | `idempotency-rules.md` |
+| Provider credentials | Until rotated (≤ 90 days DEK) | `security-rules.md` |
+
+Agents MUST consult this table before implementing any data cleanup, archival,
+or TTL logic. When in doubt, follow the longer retention period.
 
 ## Agent Checklist
 - Do not update terminal transaction states in place.

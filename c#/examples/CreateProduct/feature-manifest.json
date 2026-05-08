@@ -1,0 +1,26 @@
+{
+  "feature": "CreateProduct",
+  "module": "Catalog",
+  "type": "Command",
+  "version": "1.0.0",
+  "dependencies": [
+    "IProductRepository",
+    "ProductManager"
+  ],
+  "layers_touched": [
+    "Domain.Shared",
+    "Domain",
+    "Application.Contracts",
+    "Application",
+    "EntityFrameworkCore",
+    "HttpApi",
+    "Tests"
+  ],
+  "permissions": [
+    "Catalog.Product.Create"
+  ],
+  "events": [
+    "ProductCreatedEto"
+  ],
+  "ai_status": "Complete"
+}

@@ -21,6 +21,7 @@ Trước khi thực thi bất kỳ tác vụ phức tạp nào, hãy đảm bả
 - `naming-conventions.md`: Quy tắc đặt tên mang tính tất định (có thể đoán trước) cho mọi thành phần.
 - `anti-patterns.md`: Những cách viết code bị cấm.
 - `api-contract-rules.md`: Quy tắc cho DTO, AppService contracts, HTTP APIs, và integration events.
+- `error-code-conventions.md`: Quy ước đặt tên mã lỗi, phân vùng số, và ánh xạ HTTP status.
 - `testing-rules.md`: Quy tắc viết test theo từng layer và contract tests.
 - `ci-rules.md`: Quy tắc kiểm tra tính hợp lệ của build/test/analyzer/migration.
 
@@ -32,10 +33,18 @@ Trước khi thực thi bất kỳ tác vụ phức tạp nào, hãy đảm bả
 
 ### Các Thư Mục Vận Hành (Operational Folders)
 - `/prompts/`: Chứa các meta-prompt mạnh mẽ (VD: `feature-generator.md`) được dùng để khởi chạy tác vụ của bạn.
-- `/workflows/`: Các Quy trình Thao tác Chuẩn (SOPs) từng bước (VD: `feature-implementation.md`) để hướng dẫn bạn thực thi.
-- `/workflows/project-onboarding.md`: Workflow tạo rulebook cho dự án C# mới.
+- `/workflows/`: Các Quy trình Thao tác Chuẩn (SOPs) từng bước:
+  - `feature-implementation.md`: Triển khai tính năng mới.
+  - `project-onboarding.md`: Tạo rulebook cho dự án C# mới.
+  - `bug-fix.md`: Quy trình sửa lỗi và hotfix.
+  - `code-review.md`: Checklist review code có cấu trúc.
+  - `agent-memory-workflow.md`: Ghi nhớ xuyên phiên làm việc.
+- `/examples/`: Các ví dụ tham khảo hoàn chỉnh (exemplar) — KHÔNG phải code production. Xem `examples/README.md`.
 - `/projects/`: Chứa các quy tắc đặc thù cho từng nghiệp vụ (domain) cụ thể (VD: `payment-hub/idempotency-rules.md`). Luôn kiểm tra thư mục này nếu bạn đang làm việc trên một project cụ thể!
-- `/repair-strategies/`: Các hướng dẫn để tự động sửa chữa và debug (VD: `compile-errors.md`).
+- `/repair-strategies/`: Các hướng dẫn để tự động sửa chữa và debug:
+  - `compile-errors.md`: Lỗi biên dịch.
+  - `runtime-errors.md`: Lỗi runtime (NullRef, DI, timeout, v.v.).
+  - `test-failures.md`: Lỗi test (assertion, flaky, setup).
 
 ## Thứ Tự Ưu Tiên Của Project Rulebook (Project Rulebook Precedence)
 Khi làm việc trong một project cụ thể:

@@ -2,14 +2,30 @@
 
 Thư mục `thoughts/` lưu trữ các tài liệu (artifacts) kỹ thuật ngữ cảnh, giúp các AI Agent và con người có thể tiếp tục công việc xuyên suốt qua nhiều phiên làm việc (sessions) khác nhau mà không làm quá tải các file chỉ thị gốc.
 
+## Quy Tắc Đặt Tên File (File Naming Convention)
+
+Tất cả file trong `shared/` **PHẢI** tuân theo định dạng:
+
+```
+YYYYMMDD_HHMM_task-name.md
+```
+
+- `YYYYMMDD`: Ngày tạo file (ví dụ: `20260508`).
+- `HHMM`: Giờ tạo file theo local time 24h (ví dụ: `1335` = 13:35).
+- `task-name`: Tên tác vụ, dùng kebab-case (ví dụ: `harness-phase2-ticket`).
+
+Ví dụ: `20260508_1335_harness-phase2-ticket.md`
+
+Quy tắc này giúp các file tự động sắp xếp theo thứ tự thời gian khi liệt kê thư mục.
+
 ## Cấu Trúc (Structure)
 
 ```text
 thoughts/
  ├── shared/
- │    ├── 01-tickets/
- │    ├── 02-research/
- │    └── 03-plans/
+ │    ├── 01-tickets/    ← YYYYMMDD_HHMM_task-name.md
+ │    ├── 02-research/   ← YYYYMMDD_HHMM_task-name.md
+ │    └── 03-plans/      ← YYYYMMDD_HHMM_task-name.md
  └── templates/
       ├── ticket-template.md
       ├── plan-template.md

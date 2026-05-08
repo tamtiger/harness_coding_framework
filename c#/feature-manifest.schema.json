@@ -72,6 +72,11 @@
     "ai_status": {
       "type": "string",
       "enum": ["Complete", "Draft", "NeedsReview"]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Optional semver string tracking feature manifest evolution (e.g., 1.0.0)."
     }
   }
 }

@@ -14,6 +14,8 @@ Trước khi viết code, thay đổi kiến trúc hoặc trả lời các câu 
 | Các stack khác | `{stack}/README.md` nếu thư mục của stack đó tồn tại |
 | Rulebook cho dự án C# mới | `c#/workflows/project-onboarding.md` |
 | Tính năng C# mới | `c#/workflows/feature-implementation.md` |
+| Sửa lỗi / Hotfix C# | `c#/workflows/bug-fix.md` |
+| Review code C# | `c#/workflows/code-review.md` |
 | Công việc C# kéo dài (Long-running) | `c#/workflows/agent-memory-workflow.md` |
 | Nghiên cứu & Lập kế hoạch (Research & Planning) | `thoughts/README.md` |
 
@@ -33,7 +35,7 @@ Hãy sử dụng repository này như một hệ thống "Kỹ sư ngữ cảnh"
 
 1. Xác định phạm vi (scope): stack, project, module, tính năng, hành động và các layer bị ảnh hưởng.
 2. Chỉ tải (load) các rulebook cần thiết cho phạm vi đó.
-3. Đối với các công việc phức tạp/lớn, tạo hoặc cập nhật ticket/plan nằm trong `thoughts/`.
+3. **Thoughts First (Bắt Buộc)**: Đối với MỌI công việc không nhỏ (non-trivial), agent PHẢI tạo hoặc cập nhật ticket trong `thoughts/shared/01-tickets/` và plan trong `thoughts/shared/03-plans/` TRƯỚC KHI viết code. Chỉ được bỏ qua bước này khi tác vụ là sửa lỗi nhỏ (< 3 files), cập nhật tài liệu đơn lẻ, hoặc con người yêu cầu rõ ràng bỏ qua.
 4. Đối với việc phát triển tính năng C#, tạo hoặc cập nhật `prompt-spec.md` trước khi bắt tay vào triển khai.
 5. Giữ file `feature-manifest.json` luôn đồng bộ với các dependencies, quyền hạn (permissions), events, các layer bị chạm đến và trạng thái `ai_status`.
 6. Tự động kiểm tra với các script build, tests và script harness validation phù hợp trước khi báo cáo hoàn thành.

@@ -6,6 +6,8 @@
 - **Project**: `{ProjectNameOrNone}`
 - **Module**: `{ModuleNameOrNone}`
 - **Requester**: `{NameOrTeam}`
+- **Priority**: `Critical|High|Medium|Low`
+- **Estimated Effort**: `S|M|L|XL`
 - **Status**: `Draft|Ready|In Progress|Done`
 
 ## Problem

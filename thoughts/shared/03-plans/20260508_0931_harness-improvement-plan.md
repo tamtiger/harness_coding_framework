@@ -1,8 +1,8 @@
 # Plan: Harness Improvement Roadmap
 
 ## Source Ticket
-- [`thoughts/shared/01-tickets/harness-improvement-ticket.md`](../../01-tickets/harness-improvement-ticket.md)
-- Research: [`thoughts/shared/02-research/harness-improvement-research.md`](../../02-research/harness-improvement-research.md)
+- [`thoughts/shared/01-tickets/20260508_1006_harness-improvement-ticket.md`](../../01-tickets/20260508_1006_harness-improvement-ticket.md)
+- Research: [`thoughts/shared/02-research/20260508_1006_harness-improvement-research.md`](../../02-research/20260508_1006_harness-improvement-research.md)
 
 ## Scope Summary
 Improve this repository as an AI-native engineering harness while preserving

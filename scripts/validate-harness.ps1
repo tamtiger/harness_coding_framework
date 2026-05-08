@@ -7,6 +7,17 @@ $ErrorActionPreference = "Stop"
 $resolvedRoot = (Resolve-Path -Path $Root).Path
 $errors = New-Object System.Collections.Generic.List[string]
 
+# --- Counters for summary ---
+$counts = @{
+    RootFiles       = 0
+    Templates       = 0
+    ProjectRulebooks = 0
+    Manifests       = 0
+    PromptSpecs     = 0
+    RoutingRefs     = 0
+    AgentMemories   = 0
+}
+
 $allowedTypes = @("Command", "Query")
 $allowedStatuses = @("Complete", "Draft", "NeedsReview")
 $allowedLayers = @(
@@ -79,17 +90,54 @@ function Test-ArrayProperty {
     }
 }
 
+# =============================================================================
+# 1. Root files
+# =============================================================================
+
 $agentsPath = Join-Path $resolvedRoot "AGENTS.md"
 if (-not (Test-Path -LiteralPath $agentsPath)) {
     Add-ValidationError "Root AGENTS.md is missing."
+} else {
+    $counts.RootFiles++
 }
 
 $csharpReadmePath = Join-Path $resolvedRoot "c#/README.md"
 if (Test-Path -LiteralPath (Join-Path $resolvedRoot "c#")) {
     if (-not (Test-Path -LiteralPath $csharpReadmePath)) {
         Add-ValidationError "c#/README.md is missing while c#/ exists."
+    } else {
+        $counts.RootFiles++
     }
 }
+
+# =============================================================================
+# 2. Cross-reference validation for AGENTS.md routing table
+# =============================================================================
+
+if (Test-Path -LiteralPath $agentsPath) {
+    $agentsContent = Get-Content -LiteralPath $agentsPath -Raw
+
+    # Extract backtick-quoted file paths from the routing table rows
+    $routingMatches = [regex]::Matches($agentsContent, '\|\s*`([^`]+\.(md|json))`\s*\|')
+    foreach ($routingMatch in $routingMatches) {
+        $referencedPath = $routingMatch.Groups[1].Value
+
+        # Skip paths with placeholders like {ProjectName} or {stack}
+        if ($referencedPath -match '\{') {
+            continue
+        }
+
+        $fullPath = Join-Path $resolvedRoot $referencedPath
+        if (-not (Test-Path -LiteralPath $fullPath)) {
+            Add-ValidationError "AGENTS.md routing table references '$referencedPath' but the file does not exist."
+        }
+        $counts.RoutingRefs++
+    }
+}
+
+# =============================================================================
+# 3. Thoughts workspace
+# =============================================================================
 
 $thoughtsPath = Join-Path $resolvedRoot "thoughts"
 if (Test-Path -LiteralPath $thoughtsPath) {
@@ -116,8 +164,13 @@ if (Test-Path -LiteralPath $thoughtsPath) {
         if ([string]::IsNullOrWhiteSpace($templateContent)) {
             Add-ValidationError "thoughts/templates/$templateName must not be empty."
         }
+        $counts.Templates++
     }
 }
+
+# =============================================================================
+# 4. C# project rulebooks
+# =============================================================================
 
 $csharpProjectsPath = Join-Path $resolvedRoot "c#/projects"
 if (Test-Path -LiteralPath $csharpProjectsPath) {
@@ -135,9 +188,14 @@ if (Test-Path -LiteralPath $csharpProjectsPath) {
             if ([string]::IsNullOrWhiteSpace($rulebookContent)) {
                 Add-ValidationError "$relativeRulebookPath/$rulebookFile must not be empty."
             }
+            $counts.ProjectRulebooks++
         }
     }
 }
+
+# =============================================================================
+# 5. Feature manifests
+# =============================================================================
 
 $manifestFiles = Get-ChildItem -LiteralPath $resolvedRoot -Recurse -Filter "feature-manifest.json" -File
 foreach ($manifestFile in $manifestFiles) {
@@ -177,7 +235,12 @@ foreach ($manifestFile in $manifestFiles) {
     if (-not (Test-Path -LiteralPath $promptSpecPath)) {
         Add-ValidationError "${relativePath}: sibling prompt-spec.md is required."
     }
+    $counts.Manifests++
 }
+
+# =============================================================================
+# 6. Prompt specs
+# =============================================================================
 
 $promptSpecFiles = Get-ChildItem -LiteralPath $resolvedRoot -Recurse -Filter "prompt-spec.md" -File
 foreach ($promptSpecFile in $promptSpecFiles) {
@@ -194,14 +257,51 @@ foreach ($promptSpecFile in $promptSpecFiles) {
             Add-ValidationError "${relativePath}: missing required heading '$heading'."
         }
     }
+    $counts.PromptSpecs++
 }
+
+# =============================================================================
+# 7. Agent memory format validation
+# =============================================================================
+
+$agentMemoryFiles = Get-ChildItem -LiteralPath $resolvedRoot -Recurse -Filter "AGENT_MEMORY.md" -File
+foreach ($memoryFile in $agentMemoryFiles) {
+    $relativePath = Resolve-Path -LiteralPath $memoryFile.FullName -Relative
+    $content = Get-Content -LiteralPath $memoryFile.FullName -Raw
+
+    foreach ($heading in @(
+        "## Current Context",
+        "## Goal",
+        "## Current State",
+        "## Next Steps"
+    )) {
+        if ($content -notmatch [regex]::Escape($heading)) {
+            Add-ValidationError "${relativePath}: missing required heading '$heading'."
+        }
+    }
+    $counts.AgentMemories++
+}
+
+# =============================================================================
+# Output
+# =============================================================================
 
 if ($errors.Count -gt 0) {
     Write-Host "Harness validation failed:" -ForegroundColor Red
     foreach ($validationError in $errors) {
         Write-Host "- $validationError" -ForegroundColor Red
     }
+    Write-Host ""
+    Write-Host ("Validated: {0} root files, {1} templates, {2} project rulebooks, {3} manifests, {4} prompt-specs, {5} routing refs, {6} agent memories." -f `
+        $counts.RootFiles, $counts.Templates, $counts.ProjectRulebooks, `
+        $counts.Manifests, $counts.PromptSpecs, $counts.RoutingRefs, `
+        $counts.AgentMemories) -ForegroundColor Yellow
     exit 1
 }
 
 Write-Host "Harness validation passed." -ForegroundColor Green
+Write-Host ("Validated: {0} root files, {1} templates, {2} project rulebooks, {3} manifests, {4} prompt-specs, {5} routing refs, {6} agent memories." -f `
+    $counts.RootFiles, $counts.Templates, $counts.ProjectRulebooks, `
+    $counts.Manifests, $counts.PromptSpecs, $counts.RoutingRefs, `
+    $counts.AgentMemories) -ForegroundColor Green
+
