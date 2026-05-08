@@ -1,11 +1,10 @@
-# Thoughts Workspace
+# Không Gian Tư Duy (Thoughts Workspace)
 
-`thoughts/` stores context-engineering artifacts that help AI agents and humans
-carry work across sessions without overloading root instructions.
+Thư mục `thoughts/` lưu trữ các tài liệu (artifacts) kỹ thuật ngữ cảnh, giúp các AI Agent và con người có thể tiếp tục công việc xuyên suốt qua nhiều phiên làm việc (sessions) khác nhau mà không làm quá tải các file chỉ thị gốc.
 
-## Structure
+## Cấu Trúc (Structure)
 
-```
+```text
 thoughts/
  ├── shared/
  │    ├── 01-tickets/
@@ -18,13 +17,10 @@ thoughts/
       └── agent-memory-template.md
 ```
 
-## Usage
+## Cách Sử Dụng (Usage)
 
-- Use `shared/01-tickets/` for feature requests, bugs, and architecture tasks.
-- Use `shared/03-plans/` for implementation plans that can be reviewed before code
-  changes.
-- Use `shared/02-research/` for codebase or external research that should be reused.
-- Keep files concrete: record the real stack, project, module, decisions, risks,
-  and validation commands.
-- For C# feature work, the approved plan should point to the feature
-  `prompt-spec.md` and `feature-manifest.json`.
+- Sử dụng `shared/01-tickets/` cho các yêu cầu tính năng (feature requests), báo lỗi (bugs), và các tác vụ về kiến trúc.
+- Sử dụng `shared/03-plans/` cho các bản kế hoạch triển khai chi tiết cần được duyệt (review) trước khi tiến hành sửa đổi mã nguồn.
+- Sử dụng `shared/02-research/` cho các nghiên cứu về hệ thống hiện tại hoặc nghiên cứu công nghệ bên ngoài có khả năng tái sử dụng.
+- Cần ghi lại thông tin một cách cụ thể: lưu lại chính xác stack, project, module, các quyết định kiến trúc, rủi ro dự kiến và các câu lệnh kiểm thử (validation commands).
+- Đối với việc phát triển tính năng C#, file Plan sau khi được duyệt cần chứa liên kết trỏ tới file `prompt-spec.md` và `feature-manifest.json` của tính năng đó.

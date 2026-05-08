@@ -1,61 +1,47 @@
-# AI Agent Global Instructions
+# Chỉ Thị Chung Dành Cho AI Agent (AI Agent Global Instructions)
 
-This repository is an AI-Native Engineering Harness for polyglot software
-delivery. `AGENTS.md` is the single shared entrypoint for every AI coding tool:
-Codex, Cursor, Windsurf, Claude, GitHub Copilot, Gemini, and future agents.
-Do not create tool-specific root instruction files unless a human explicitly
-asks for them.
+Repository này là một AI-Native Engineering Harness dành cho việc phát triển phần mềm đa ngôn ngữ (polyglot). `AGENTS.md` là điểm vào chung duy nhất cho mọi công cụ lập trình AI: Codex, Cursor, Windsurf, Claude, GitHub Copilot, Gemini, và các agent trong tương lai.
+Tuyệt đối không tạo các file chỉ thị gốc đặc thù cho từng công cụ (ví dụ `.cursorrules`, `CLAUDE.md`) trừ khi con người yêu cầu rõ ràng.
 
-## Mandatory Routing
+## Định Tuyến Bắt Buộc (Mandatory Routing)
 
-Before writing code, changing architecture, or answering implementation
-questions, identify the technology stack and load the matching rulebook.
+Trước khi viết code, thay đổi kiến trúc hoặc trả lời các câu hỏi về triển khai, hãy xác định technology stack và tải file rulebook tương ứng.
 
-| Work Area | Read First |
+| Khu Vực Làm Việc (Work Area) | Đọc Trước Tiên (Read First) |
 | --- | --- |
 | C# / .NET / ABP Framework | `c#/README.md` |
-| C# project-specific work | `c#/projects/{ProjectName}/README.md` after `c#/README.md` |
-| Other stacks | `{stack}/README.md` when that stack folder exists |
-| New C# project rulebook | `c#/workflows/project-onboarding.md` |
-| New C# feature | `c#/workflows/feature-implementation.md` |
-| Long-running C# work | `c#/workflows/agent-memory-workflow.md` |
+| Các công việc đặc thù của dự án C# | `c#/projects/{ProjectName}/README.md` sau khi đọc `c#/README.md` |
+| Các stack khác | `{stack}/README.md` nếu thư mục của stack đó tồn tại |
+| Rulebook cho dự án C# mới | `c#/workflows/project-onboarding.md` |
+| Tính năng C# mới | `c#/workflows/feature-implementation.md` |
+| Công việc C# kéo dài (Long-running) | `c#/workflows/agent-memory-workflow.md` |
+| Nghiên cứu & Lập kế hoạch (Research & Planning) | `thoughts/README.md` |
 
-Stack rulebooks define baseline architecture, dependency boundaries, naming,
-testing, CI, and agent workflow. Project rulebooks define product-specific
-decisions such as database engine, messaging, security, observability, state
-machines, external adapters, and operational workflows.
+Các rulebook của stack định nghĩa baseline về kiến trúc, ranh giới phụ thuộc (dependency boundaries), quy tắc đặt tên, testing, CI, và quy trình của agent. Các rulebook của dự án định nghĩa các quyết định đặc thù cho sản phẩm như database engine, messaging, bảo mật, observability, máy trạng thái (state machines), các adapter bên ngoài và quy trình vận hành.
 
-When a project-specific rule conflicts with a generic stack rule on a
-product-specific detail, the project-specific rulebook takes precedence. Generic
-architecture and layer boundaries still apply unless the project rulebook records
-an explicit override.
+Khi quy tắc đặc thù của dự án mâu thuẫn với quy tắc chung của stack về một chi tiết triển khai cụ thể, quy tắc của dự án sẽ được ưu tiên (take precedence). Các ranh giới kiến trúc và phân tầng chung vẫn được áp dụng trừ khi rulebook dự án có ghi nhận sự ghi đè (override) rõ ràng.
 
-## Current Stack Inventory
+## Danh Mục Stack Hiện Tại (Current Stack Inventory)
 
-- `c#/`: C# / .NET / ABP Framework baseline rulebook.
-- `c#/projects/payment-hub/`: Payment Hub product rulebook.
+- `c#/`: Rulebook cơ sở cho C# / .NET / ABP Framework.
+- `c#/projects/payment-hub/`: Rulebook cho sản phẩm Payment Hub.
+- `thoughts/`: Không gian tư duy (Workspace) chứa templates cho tickets, plans, research và agent memory.
 
-## Agent Workflow
+## Luồng Làm Việc Của Agent (Agent Workflow)
 
-Use the repository as a context-engineering system, not only as a prompt folder.
+Hãy sử dụng repository này như một hệ thống "Kỹ sư ngữ cảnh" (context-engineering system), không chỉ đơn thuần là một thư mục chứa prompt.
 
-1. Establish scope: stack, project, module, feature, action, and affected layers.
-2. Load only the rulebooks required for that scope.
-3. For substantial work, create or update a ticket/plan under `thoughts/`.
-4. For C# feature work, create or update `prompt-spec.md` before implementation.
-5. Keep `feature-manifest.json` aligned with dependencies, permissions, events,
-   touched layers, and `ai_status`.
-6. Validate with the relevant build, tests, and harness validation scripts before
-   reporting completion.
+1. Xác định phạm vi (scope): stack, project, module, tính năng, hành động và các layer bị ảnh hưởng.
+2. Chỉ tải (load) các rulebook cần thiết cho phạm vi đó.
+3. Đối với các công việc phức tạp/lớn, tạo hoặc cập nhật ticket/plan nằm trong `thoughts/`.
+4. Đối với việc phát triển tính năng C#, tạo hoặc cập nhật `prompt-spec.md` trước khi bắt tay vào triển khai.
+5. Giữ file `feature-manifest.json` luôn đồng bộ với các dependencies, quyền hạn (permissions), events, các layer bị chạm đến và trạng thái `ai_status`.
+6. Tự động kiểm tra với các script build, tests và script harness validation phù hợp trước khi báo cáo hoàn thành.
 
-## Non-Negotiable Constraints
+## Các Ràng Buộc Không Thể Thương Lượng (Non-Negotiable Constraints)
 
-- Do not hallucinate paths. Inspect the repository when uncertain.
-- Do not generate incomplete code, placeholder implementations, or
-  `NotImplementedException`.
-- Do not refactor unrelated files or cross module boundaries without a task
-  requirement.
-- Do not make product-specific infrastructure decisions outside the relevant
-  project rulebook.
-- Keep this file concise. Detailed rules belong in stack/project rulebooks,
-  workflows, templates, or scripts that agents load on demand.
+- Không được ảo tưởng/đoán mò đường dẫn (hallucinate paths). Luôn kiểm tra (inspect) repository khi không chắc chắn.
+- Không được sinh ra code chưa hoàn thiện, các bản triển khai giữ chỗ (placeholder implementations), hoặc `NotImplementedException`.
+- Không được refactor các file không liên quan hoặc vượt qua ranh giới module nếu tác vụ không yêu cầu.
+- Không được đưa ra các quyết định về cơ sở hạ tầng đặc thù của sản phẩm nếu nó không nằm trong rulebook của dự án đó.
+- Giữ file này ngắn gọn. Các quy tắc chi tiết phải nằm trong rulebooks của stack/project, workflows, templates, hoặc các scripts mà agent có thể gọi tải theo nhu cầu (on demand).

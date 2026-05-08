@@ -1,56 +1,42 @@
 # AI-Native Engineering Harness
 
-`harness_coding_framework` is a polyglot, agent-native engineering harness. It
-stores the routing instructions, rulebooks, workflows, prompts, validation
-scripts, and planning artifacts that AI coding agents need before touching a
-real codebase.
+`harness_coding_framework` là một framework phát triển phần mềm đa ngôn ngữ (polyglot) được thiết kế tối ưu cho AI (agent-native). Nó lưu trữ các chỉ thị điều hướng (routing instructions), quy tắc (rulebooks), luồng công việc (workflows), mẫu prompt, kịch bản kiểm tra (validation scripts) và các tài liệu lập kế hoạch mà các AI Agent cần đọc trước khi chạm vào mã nguồn thực tế.
 
-The repository is designed around deterministic context loading: agents start at
-one shared entrypoint, route into the correct technology stack, follow the
-project-specific rulebook when one exists, then validate their work before
-reporting completion.
+Repository này được thiết kế xoay quanh nguyên lý "Tải Ngữ Cảnh Tất Định" (deterministic context loading): các agent sẽ bắt đầu từ một điểm vào chung duy nhất, sau đó điều hướng đến đúng technology stack, tuân thủ các quy tắc riêng của dự án (project-specific rulebook) nếu có, và cuối cùng phải tự chạy test/validate công việc trước khi báo cáo hoàn thành.
 
-## Agent Entrypoint
+## Điểm Vào Cho Agent (Agent Entrypoint)
 
-[AGENTS.md](AGENTS.md) is the single shared instruction file for all AI coding
-tools. Do not add tool-specific root files such as `CLAUDE.md`, Cursor rules, or
-Copilot instructions unless the team explicitly decides to support them later.
+[AGENTS.md](AGENTS.md) là file chỉ thị chung duy nhất dành cho TẤT CẢ các công cụ AI (Antigravity, Cursor, GitHub Copilot, v.v.). Tuyệt đối không thêm các file root đặc thù cho từng công cụ (ví dụ: `CLAUDE.md`, `.cursorrules`...) trừ khi team quyết định hỗ trợ chúng sau này.
 
-Agent flow:
+Luồng làm việc của Agent:
 
-1. Read `AGENTS.md`.
-2. Identify the stack and project.
-3. Read the matching stack `README.md`.
-4. Read the matching project rulebook when the task belongs to a concrete
-   project.
-5. Use the relevant workflow, prompt, plan, and validation script.
+1. Đọc `AGENTS.md`.
+2. Xác định stack và project đang làm việc.
+3. Đọc file `README.md` tương ứng của stack đó.
+4. Đọc rulebook của project nếu tác vụ thuộc về một project cụ thể.
+5. Sử dụng workflow, prompt, bản kế hoạch (plan) và validation script tương ứng.
 
-## Repository Map
+## Bản Đồ Repository (Repository Map)
 
-| Path | Purpose |
+| Đường dẫn (Path) | Mục đích (Purpose) |
 | --- | --- |
-| `AGENTS.md` | Single tool-agnostic routing entrypoint for agents |
-| `c#/` | C# / .NET / ABP Framework baseline rulebook |
-| `c#/prompts/` | Task prompts, including the C# feature generator |
-| `c#/workflows/` | Implementation, onboarding, memory, and repair workflows |
-| `c#/projects/payment-hub/` | Payment Hub project-specific rulebook |
-| `thoughts/` | Ticket, plan, research, and memory templates |
-| `scripts/validate-harness.ps1` | Harness metadata and rulebook validation |
+| `AGENTS.md` | Điểm vào định tuyến chung không phụ thuộc công cụ dành cho AI agents |
+| `c#/` | Rulebook kiến trúc cơ sở cho C# / .NET / ABP Framework |
+| `c#/prompts/` | Các prompt đặc thù, bao gồm C# feature generator |
+| `c#/workflows/` | Các luồng công việc: triển khai (implementation), khởi tạo dự án (onboarding), ghi nhớ (memory) và sửa lỗi (repair) |
+| `c#/projects/payment-hub/` | Rulebook đặc thù cho dự án Payment Hub |
+| `thoughts/` | Workspace chứa templates và các file Tickets, Plans, Research, Memory |
+| `scripts/validate-harness.ps1` | Script kiểm tra tính hợp lệ của metadata và rulebooks |
 
-## Supported Stack
+## Các Stack Được Hỗ Trợ (Supported Stack)
 
 ### C# / .NET / ABP Framework
 
-Start with [c#/README.md](c#/README.md). This rulebook defines the baseline for
-ABP, vertical slices, DDD boundaries, API contracts, testing, CI, naming,
-dependencies, and agent workflow.
+Bắt đầu với [c#/README.md](c#/README.md). Rulebook này định nghĩa các baseline về ABP, vertical slices, ranh giới DDD, API contracts, testing, CI, naming conventions, dependencies và quy trình làm việc của agent.
 
-Project-specific rulebooks live under `c#/projects/{ProjectName}/`. The current
-project rulebook is [Payment Hub](c#/projects/payment-hub/README.md), which
-adds payment orchestration rules for security, idempotency, state machines,
-messaging, persistence, observability, provider adapters, testing, and CI.
+Các rulebook đặc thù của project nằm ở `c#/projects/{ProjectName}/`. Project rulebook hiện tại là [Payment Hub](c#/projects/payment-hub/README.md), trong đó bổ sung thêm các quy tắc điều phối thanh toán về bảo mật (security), tính lũy đẳng (idempotency), máy trạng thái (state machines), messaging, lưu trữ (persistence), observability, provider adapters, testing và CI.
 
-Other stacks can be added later with the same pattern:
+Các stack khác có thể được thêm vào sau với cùng một cấu trúc (pattern):
 
 ```text
 {stack}/
@@ -60,9 +46,9 @@ Other stacks can be added later with the same pattern:
  └── projects/{ProjectName}/
 ```
 
-## Context Workflow
+## Luồng Ngữ Cảnh (Context Workflow)
 
-Use `thoughts/` for work that should survive beyond a single chat message.
+Sử dụng thư mục `thoughts/` cho các công việc cần lưu trữ dài hạn (vượt qua phạm vi của một phiên chat).
 
 ```text
 thoughts/
@@ -77,62 +63,57 @@ thoughts/
       └── agent-memory-template.md
 ```
 
-Recommended flow:
+Quy trình (flow) được khuyến nghị:
 
-1. Create a ticket from `thoughts/templates/ticket-template.md`.
-2. Create a plan from `thoughts/templates/plan-template.md`.
-3. Implement against the approved plan.
-4. For C# features, create or update `prompt-spec.md` and
-   `feature-manifest.json`.
-5. Validate and update the plan checklist before completion.
+1. Tạo một Ticket từ `thoughts/templates/ticket-template.md`.
+2. Tạo một Plan từ `thoughts/templates/plan-template.md`.
+3. Bắt tay vào viết code theo đúng Plan đã được duyệt.
+4. Đối với các tính năng C#, tạo mới hoặc cập nhật `prompt-spec.md` và `feature-manifest.json`.
+5. Chạy test (validate) và cập nhật checklist trong Plan trước khi báo xong.
 
-The current harness improvement plan is tracked at
+Kế hoạch cải tiến harness hiện tại đang được theo dõi tại
 [thoughts/shared/03-plans/harness-improvement-plan.md](thoughts/shared/03-plans/harness-improvement-plan.md).
 
-## C# Feature Generation
+## Khởi Tạo Tính Năng C# (C# Feature Generation)
 
-Use [c#/prompts/feature-generator.md](c#/prompts/feature-generator.md) for ABP
-feature work. It requires:
+Sử dụng [c#/prompts/feature-generator.md](c#/prompts/feature-generator.md) cho các tính năng ABP. Yêu cầu:
 
-- stack and project rulebook loading
-- `prompt-spec.md` before implementation
-- `feature-manifest.json` aligned with touched layers
-- contracts, domain, application, infrastructure, HTTP API, and tests in their
-  owning ABP projects
-- focused validation before marking work complete
+- Đọc tải rulebook của stack và project
+- Cần có `prompt-spec.md` trước khi triển khai
+- Cập nhật `feature-manifest.json` khớp với các layer bị ảnh hưởng
+- Đặt đúng vị trí các thành phần (contracts, domain, application, infrastructure, HTTP API, tests) vào các project ABP tương ứng
+- Phải kiểm tra/validate thật kỹ trước khi đánh dấu tác vụ hoàn thành
 
-## Validation
+## Kiểm Tra Hợp Lệ (Validation)
 
-Run harness validation from the repository root:
+Chạy script kiểm tra (harness validation) từ thư mục gốc của repository:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate-harness.ps1
 ```
 
-The script currently checks:
+Script hiện đang kiểm tra:
 
-- root `AGENTS.md`
+- File gốc `AGENTS.md`
 - `c#/README.md`
-- `thoughts/` directory and templates
-- required C# project rulebook files
-- `feature-manifest.json` shape and allowed values
-- sibling `prompt-spec.md` for each feature manifest
-- required headings in prompt specs
+- Thư mục `thoughts/` và các file templates
+- Các file bắt buộc trong C# project rulebook
+- Định dạng và các giá trị hợp lệ của `feature-manifest.json`
+- Sự tồn tại của file `prompt-spec.md` song song với mỗi feature manifest
+- Các tiêu đề (headings) bắt buộc trong prompt specs
 
 
-## Human Usage
+## Dành Cho Con Người (Human Usage)
 
-When directing an AI agent:
+Khi bạn muốn giao việc cho một AI agent:
 
-1. State the target stack, project, module, and desired outcome.
-2. Ask the agent to read `AGENTS.md` and the relevant rulebooks.
-3. For substantial work, ask it to create a plan under `thoughts/shared/03-plans/`.
-4. For C# feature work, ask it to use the feature generator prompt and maintain
-   `prompt-spec.md` plus `feature-manifest.json`.
-5. Require `scripts/validate-harness.ps1` before accepting completion.
+1. Nêu rõ đích đến: stack, project, module, và kết quả mong muốn.
+2. Yêu cầu agent đọc `AGENTS.md` và các rulebooks liên quan.
+3. Đối với các tác vụ phức tạp, yêu cầu agent tạo một Plan nằm trong `thoughts/shared/03-plans/`.
+4. Đối với việc phát triển tính năng C#, yêu cầu agent sử dụng feature generator prompt và duy trì file `prompt-spec.md` cộng với `feature-manifest.json`.
+5. Bắt buộc agent phải chạy `scripts/validate-harness.ps1` thành công trước khi chấp nhận hoàn thành tác vụ.
 
-## Current Implementation Status
+## Trạng Thái Triển Khai Hiện Tại (Current Implementation Status)
 
-The harness improvement phase is implemented and checked off in
-`thoughts/shared/03-plans/harness-improvement-plan.md`. Harness validation is
-passing locally.
+Giai đoạn cải tiến harness đã được triển khai xong và đánh dấu hoàn tất trong
+`thoughts/shared/03-plans/harness-improvement-plan.md`. Script kiểm tra (Harness validation) đang pass 100% trên môi trường local.
