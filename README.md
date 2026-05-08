@@ -1,46 +1,138 @@
 # AI-Native Engineering Harness
 
-Chào mừng bạn đến với repository **Harness Coding Framework**. Đây không chỉ là một codebase tiêu chuẩn; nó là một **Nền tảng Kỹ thuật AI-Native Đa Ngôn Ngữ (Polyglot Harness)** được xây dựng đặc biệt để thao tác, mở rộng và bảo trì bởi các AI Coding Agent tự trị (như Gemini, Cursor, GitHub Copilot).
+`harness_coding_framework` is a polyglot, agent-native engineering harness. It
+stores the routing instructions, rulebooks, workflows, prompts, validation
+scripts, and planning artifacts that AI coding agents need before touching a
+real codebase.
 
-Kiến trúc được thiết kế xoay quanh tính **Tất định (Determinism)** và **Cô lập Tính năng (Strict Feature Isolation)**, áp dụng cho nhiều hệ sinh thái công nghệ khác nhau.
+The repository is designed around deterministic context loading: agents start at
+one shared entrypoint, route into the correct technology stack, follow the
+project-specific rulebook when one exists, then validate their work before
+reporting completion.
 
----
+## Agent Entrypoint
 
-## 🤖 Hướng dẫn dành cho AI Agents (ĐẶC BIỆT QUAN TRỌNG)
+[AGENTS.md](AGENTS.md) is the single shared instruction file for all AI coding
+tools. Do not add tool-specific root files such as `CLAUDE.md`, Cursor rules, or
+Copilot instructions unless the team explicitly decides to support them later.
 
-Hệ thống được truyền cảm hứng từ các mô hình **Agentic Coding Harness** hiện đại (như khái niệm từ Fabric, Trellis, hay Prompt-Driven Development). Để đảm bảo trải nghiệm liền mạch, chúng tôi cấu trúc repository thành các phân hệ theo ngôn ngữ/công nghệ (Ví dụ: `/c#/`, `/frontend/`, `/python/`).
+Agent flow:
 
-- Tại thư mục gốc đã tích hợp sẵn file cấu hình chung `AGENTS.md`. Tất cả các AI Agent đều phải lấy đây làm điểm khởi đầu.
-- **Cơ chế Định tuyến (Routing)**: Tùy thuộc vào task bạn đang thực thi thuộc ngôn ngữ/framework nào, bạn PHẢI tìm đến thư mục chứa rulebook của hệ sinh thái đó.
-- **Phân cấp Rulebook**: Rulebook theo hệ sinh thái (VD: `/c#/`) định nghĩa baseline chung. Rulebook theo project (VD: `/c#/projects/payment-hub/`) định nghĩa các quyết định cụ thể như database, message broker, security, observability, state machine, và domain workflow.
+1. Read `AGENTS.md`.
+2. Identify the stack and project.
+3. Read the matching stack `README.md`.
+4. Read the matching project rulebook when the task belongs to a concrete
+   project.
+5. Use the relevant workflow, prompt, plan, and validation script.
 
-1. **Tải Ngữ Cảnh (Context Loading)**: Luôn đọc file `AGENTS.md` ở thư mục gốc, và file `README.md` nằm trong thư mục công nghệ (VD: `/c#/README.md`) trước khi viết code.
-2. **Tải Project Context nếu có**: Nếu task thuộc một project cụ thể, đọc thêm `projects/{ProjectName}/README.md` và các rule liên quan trong project đó.
-3. **Tính Tất định (Determinism)**: Không tự bịa ra các đường dẫn file (hallucinate file paths). Tuân thủ nghiêm ngặt các quy tắc đặt tên và cấu trúc thư mục quy định trong từng phân hệ.
-4. **Cô lập Tính năng (Feature Isolation)**: Mỗi tính năng cần được module hóa chặt chẽ (VD: Vertical Slices cho Backend C#), đồng thời vẫn giữ DTO, permissions, domain, infrastructure, và API artifacts trong đúng layer.
-5. **Tính Rõ ràng (Explicitness)**: Không bao giờ sử dụng các đoạn code giữ chỗ (placeholder) như `TODO` hoặc `...`. Phải viết code hoàn chỉnh.
+## Repository Map
 
----
+| Path | Purpose |
+| --- | --- |
+| `AGENTS.md` | Single tool-agnostic routing entrypoint for agents |
+| `c#/` | C# / .NET / ABP Framework baseline rulebook |
+| `c#/prompts/` | Task prompts, including the C# feature generator |
+| `c#/workflows/` | Implementation, onboarding, memory, and repair workflows |
+| `c#/projects/payment-hub/` | Payment Hub project-specific rulebook |
+| `thoughts/` | Ticket, plan, research, and memory templates |
+| `scripts/validate-harness.ps1` | Harness metadata and rulebook validation |
 
-## 🏛️ Các Hệ Sinh Thái Hỗ Trợ (Supported Stacks)
+## Supported Stack
 
-Harness này cung cấp các bộ quy tắc chuyên sâu (Rulebook), Prompts, và Workflows cho các hệ sinh thái sau. AI Agent cần truy cập vào từng thư mục để nhận bộ quy tắc tương ứng:
+### C# / .NET / ABP Framework
 
-- 🟢 **[C# / .NET ABP Framework](c#/README.md)**: Nằm tại `/c#/`. Đây là baseline chung cho các dự án Backend Modular Monolith sử dụng .NET 8, ABP, Vertical Slices, DDD, API contracts, testing, CI validation, và agent workflow.
-  - Project-specific rulebooks nằm tại `/c#/projects/{ProjectName}/`.
-  - Ví dụ hiện có: **[Payment Hub](c#/projects/payment-hub/README.md)**.
+Start with [c#/README.md](c#/README.md). This rulebook defines the baseline for
+ABP, vertical slices, DDD boundaries, API contracts, testing, CI, naming,
+dependencies, and agent workflow.
 
-*(Các hệ sinh thái khác như Node.js, Frontend React/Vue, Python AI sẽ được mở rộng trong tương lai theo cấu trúc tương tự).*
+Project-specific rulebooks live under `c#/projects/{ProjectName}/`. The current
+project rulebook is [Payment Hub](c#/projects/payment-hub/README.md), which
+adds payment orchestration rules for security, idempotency, state machines,
+messaging, persistence, observability, provider adapters, testing, and CI.
 
----
+Other stacks can be added later with the same pattern:
 
-## 👨‍💻 Dành cho Lập trình viên Con người
+```text
+{stack}/
+ ├── README.md
+ ├── workflows/
+ ├── prompts/
+ └── projects/{ProjectName}/
+```
 
-**Cách sử dụng hệ thống này:**
-Thay vì tự tay viết những đoạn code boilerplate, công việc của bạn là điều hướng AI.
-1. Định nghĩa logic nghiệp vụ của bạn bằng ngôn ngữ tự nhiên.
-2. Trỏ AI vào rulebook hệ sinh thái, ví dụ `/c#/README.md`.
-3. Nếu làm trên một project cụ thể, trỏ AI thêm vào project rulebook, ví dụ `/c#/projects/payment-hub/README.md`.
-4. Dùng prompt generator, ví dụ `/c#/prompts/feature-generator.md`, để khởi tạo tính năng mới.
-5. Yêu cầu AI tuân thủ **Prompt-Driven Architecture** (có `prompt-spec.md`) và cập nhật `feature-manifest.json`.
-6. Review code được sinh ra, test coverage, và kiểm tra các logic nghiệp vụ.
+## Context Workflow
+
+Use `thoughts/` for work that should survive beyond a single chat message.
+
+```text
+thoughts/
+ ├── shared/
+ │    ├── 01-tickets/
+ │    ├── 02-research/
+ │    └── 03-plans/
+ └── templates/
+      ├── ticket-template.md
+      ├── plan-template.md
+      ├── research-template.md
+      └── agent-memory-template.md
+```
+
+Recommended flow:
+
+1. Create a ticket from `thoughts/templates/ticket-template.md`.
+2. Create a plan from `thoughts/templates/plan-template.md`.
+3. Implement against the approved plan.
+4. For C# features, create or update `prompt-spec.md` and
+   `feature-manifest.json`.
+5. Validate and update the plan checklist before completion.
+
+The current harness improvement plan is tracked at
+[thoughts/shared/03-plans/harness-improvement-plan.md](thoughts/shared/03-plans/harness-improvement-plan.md).
+
+## C# Feature Generation
+
+Use [c#/prompts/feature-generator.md](c#/prompts/feature-generator.md) for ABP
+feature work. It requires:
+
+- stack and project rulebook loading
+- `prompt-spec.md` before implementation
+- `feature-manifest.json` aligned with touched layers
+- contracts, domain, application, infrastructure, HTTP API, and tests in their
+  owning ABP projects
+- focused validation before marking work complete
+
+## Validation
+
+Run harness validation from the repository root:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate-harness.ps1
+```
+
+The script currently checks:
+
+- root `AGENTS.md`
+- `c#/README.md`
+- `thoughts/` directory and templates
+- required C# project rulebook files
+- `feature-manifest.json` shape and allowed values
+- sibling `prompt-spec.md` for each feature manifest
+- required headings in prompt specs
+
+
+## Human Usage
+
+When directing an AI agent:
+
+1. State the target stack, project, module, and desired outcome.
+2. Ask the agent to read `AGENTS.md` and the relevant rulebooks.
+3. For substantial work, ask it to create a plan under `thoughts/shared/03-plans/`.
+4. For C# feature work, ask it to use the feature generator prompt and maintain
+   `prompt-spec.md` plus `feature-manifest.json`.
+5. Require `scripts/validate-harness.ps1` before accepting completion.
+
+## Current Implementation Status
+
+The harness improvement phase is implemented and checked off in
+`thoughts/shared/03-plans/harness-improvement-plan.md`. Harness validation is
+passing locally.

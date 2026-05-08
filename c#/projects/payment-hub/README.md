@@ -44,6 +44,12 @@ Thư mục này chứa các quy tắc kiến trúc (Architectural Rules) và Rà
 9. **[`data-rules.md`](./data-rules.md)**
    - Transaction Store, Outbox Store, Inbox Store, retention, và persistence guardrails.
 
+10. **[`testing-rules.md`](./testing-rules.md)**
+    - Yêu cầu Unit, Integration, Contract tests và kịch bản lỗi rẽ nhánh (failure-path).
+
+11. **[`ci-rules.md`](./ci-rules.md)**
+    - Các yêu cầu kiểm tra (CI gates) bắt buộc và chính sách thất bại (failure policy).
+
 ---
 
 ## 🚀 Mục Tiêu Nền Tảng

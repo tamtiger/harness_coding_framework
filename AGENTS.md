@@ -1,30 +1,61 @@
 # AI Agent Global Instructions
 
-You are operating within the `harness_coding_framework` repository, an **AI-Native Engineering Harness** that supports polyglot architecture (multiple technology stacks like C#, Node, Frontend).
-This is the single source of routing instructions for all AI Agents (Cursor, Windsurf, Claude, GitHub Copilot, etc.).
+This repository is an AI-Native Engineering Harness for polyglot software
+delivery. `AGENTS.md` is the single shared entrypoint for every AI coding tool:
+Codex, Cursor, Windsurf, Claude, GitHub Copilot, Gemini, and future agents.
+Do not create tool-specific root instruction files unless a human explicitly
+asks for them.
 
-## ⚠️ MANDATORY DIRECTIVE
-This repository is organized by technology stacks. Before writing any code or answering architecture questions, you MUST identify the correct ecosystem you are working in (e.g., `/c#/`, `/frontend/`) and consult its specific rulebook.
+## Mandatory Routing
 
-Technology-stack rulebooks define the baseline architecture and agent workflow.
-Project-specific rulebooks under `/{stack}/projects/{ProjectName}/` define
-product/domain decisions such as database engine, messaging, security,
-observability, state machines, external adapters, and operational workflows.
-When a project-specific rule conflicts with the generic stack rule on a
-product-specific detail, the project-specific rule takes precedence.
+Before writing code, changing architecture, or answering implementation
+questions, identify the technology stack and load the matching rulebook.
 
-### Routing Mechanism:
-1. **If working with C# / .NET / ABP Framework**:
-   - MUST read: `/c#/README.md`
-   - Use rules in `/c#/architecture-rules.md`, `/c#/dependency-rules.md`, `/c#/api-contract-rules.md`, `/c#/testing-rules.md`, `/c#/ci-rules.md`, etc.
-   - If working on a concrete project, MUST also read `/c#/projects/{ProjectName}/README.md` and the relevant project-specific rule files.
-   
-2. **If working with other stacks**:
-   - Locate the root folder for that stack (e.g., `/frontend/`) and read its `README.md` for specific architectural boundaries.
-   - If that stack contains a `projects/{ProjectName}/` rulebook for the task, read it after the stack README.
+| Work Area | Read First |
+| --- | --- |
+| C# / .NET / ABP Framework | `c#/README.md` |
+| C# project-specific work | `c#/projects/{ProjectName}/README.md` after `c#/README.md` |
+| Other stacks | `{stack}/README.md` when that stack folder exists |
+| New C# project rulebook | `c#/workflows/project-onboarding.md` |
+| New C# feature | `c#/workflows/feature-implementation.md` |
+| Long-running C# work | `c#/workflows/agent-memory-workflow.md` |
 
-### Enhanced Workflows & Agent Memory:
-- **Agent Memory**: You are expected to maintain an understanding of what has been done. If working in `/c#/`, use `/c#/workflows/agent-memory-workflow.md` to log your plan or refer to existing contexts.
-- **Prompt-Driven Architecture**: Adhere to the rule that each feature must start with a `prompt-spec.md` based on `/c#/prompt-spec-template.md` where applicable and must keep `feature-manifest.json` aligned with the touched layers.
+Stack rulebooks define baseline architecture, dependency boundaries, naming,
+testing, CI, and agent workflow. Project rulebooks define product-specific
+decisions such as database engine, messaging, security, observability, state
+machines, external adapters, and operational workflows.
 
-Do not hallucinate paths or use placeholders like `TODO` or `NotImplementedException`. All generated code must be complete and adhere to the architectural rules of the respective stack.
+When a project-specific rule conflicts with a generic stack rule on a
+product-specific detail, the project-specific rulebook takes precedence. Generic
+architecture and layer boundaries still apply unless the project rulebook records
+an explicit override.
+
+## Current Stack Inventory
+
+- `c#/`: C# / .NET / ABP Framework baseline rulebook.
+- `c#/projects/payment-hub/`: Payment Hub product rulebook.
+
+## Agent Workflow
+
+Use the repository as a context-engineering system, not only as a prompt folder.
+
+1. Establish scope: stack, project, module, feature, action, and affected layers.
+2. Load only the rulebooks required for that scope.
+3. For substantial work, create or update a ticket/plan under `thoughts/`.
+4. For C# feature work, create or update `prompt-spec.md` before implementation.
+5. Keep `feature-manifest.json` aligned with dependencies, permissions, events,
+   touched layers, and `ai_status`.
+6. Validate with the relevant build, tests, and harness validation scripts before
+   reporting completion.
+
+## Non-Negotiable Constraints
+
+- Do not hallucinate paths. Inspect the repository when uncertain.
+- Do not generate incomplete code, placeholder implementations, or
+  `NotImplementedException`.
+- Do not refactor unrelated files or cross module boundaries without a task
+  requirement.
+- Do not make product-specific infrastructure decisions outside the relevant
+  project rulebook.
+- Keep this file concise. Detailed rules belong in stack/project rulebooks,
+  workflows, templates, or scripts that agents load on demand.

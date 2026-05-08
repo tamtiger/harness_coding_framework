@@ -13,6 +13,8 @@
 ## Step 1: Analysis
 - Draft or update `prompt-spec.md` before generating implementation files.
 - Use `c#/prompt-spec-template.md` as the baseline structure for `prompt-spec.md`.
+- For substantial work, create or update a ticket/plan under `thoughts/` using
+  the templates in `thoughts/templates/`.
 - Review `feature-manifest.json` when it exists; create it before completing
   the feature if it does not exist yet.
 - Identify required Domain Services and Entities.
@@ -43,8 +45,9 @@
 1. Create/Update Controller in `HttpApi` to expose the new AppService.
 
 ## Step 6: Validation
-1. Run `dotnet build` to verify compilation.
-2. Run the relevant unit, integration, and contract tests for the touched layers.
-3. Verify AI manifest `ai_status` is updated to `Complete`.
-4. Update `AGENT_MEMORY.md` when the feature is part of a long-running module,
+1. Run `./scripts/validate-harness.ps1` from the repository root.
+2. Run `dotnet build` to verify compilation.
+3. Run the relevant unit, integration, and contract tests for the touched layers.
+4. Verify AI manifest `ai_status` is updated to `Complete`.
+5. Update `AGENT_MEMORY.md` when the feature is part of a long-running module,
    epic, or project-specific implementation thread.

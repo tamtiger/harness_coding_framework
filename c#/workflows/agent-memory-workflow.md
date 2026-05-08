@@ -1,30 +1,54 @@
-# Cấu trúc và Quy trình Cập nhật Agent Memory (Nhật ký AI)
+# Workflow: Agent Memory
 
-Để đảm bảo các AI Agent không bị mất ngữ cảnh (Context Loss) khi xử lý các task phức tạp kéo dài qua nhiều phiên làm việc, hệ thống yêu cầu áp dụng quy trình **Agent Memory / Journaling**.
+Use Agent Memory when C# work spans multiple sessions, modules, epics, or
+project-specific implementation threads. Keep memory factual, compact, and
+actionable.
 
-## 1. File Context Trung Tâm (`AGENT_MEMORY.md`)
+## Memory Location
 
-Khi bắt đầu làm việc trên một module lớn hoặc một epic, Agent phải tự động tạo (hoặc đọc nếu đã có) file `AGENT_MEMORY.md` ở thư mục gốc của dự án hoặc thư mục của feature đang làm.
+Use the narrowest stable location:
 
-File này hoạt động như bộ não ngoài của AI, chứa các thông tin:
-- **Ngữ cảnh hiện tại**: Đang làm gì, mục tiêu cuối cùng là gì.
-- **Tiến độ**: Các task đã hoàn thành, các task đang làm.
-- **Quyết định kỹ thuật**: Vì sao lại chọn phương pháp A thay vì B (VD: tại sao lại sử dụng EventBus thay vì gọi API trực tiếp).
-- **Lỗi đã gặp và cách khắc phục**: Để tránh mắc lại lỗi cũ (VD: Lỗi EF Core migration do thiếu khóa ngoại).
+1. Project-level memory:
+   `c#/projects/{ProjectName}/AGENT_MEMORY.md`
+2. Feature-level memory:
+   `{Module}.Application/Features/{FeatureName}/AGENT_MEMORY.md`
+3. Repository-level memory only for cross-stack harness work:
+   `AGENT_MEMORY.md`
 
-## 2. Quy trình làm việc (The Loop)
+Create new memory files from `thoughts/templates/agent-memory-template.md`.
 
-1. **Khởi tạo/Đọc Memory**:
-   - Khi nhận prompt mới, AI phải kiểm tra xem có file `AGENT_MEMORY.md` hay không.
-   - Nếu có, đọc nó đầu tiên để khôi phục ngữ cảnh.
-   - Nếu không, và tác vụ phức tạp, hãy đề xuất tạo file này.
+## When To Create Or Read Memory
 
-2. **Thực thi và Ghi chú**:
-   - Trong quá trình viết code, nếu có một quyết định thiết kế quan trọng đi ngược lại chuẩn thông thường nhưng đã được User đồng ý, PHẢI ghi ngay vào Memory.
+- Read existing memory before changing long-running work.
+- Create memory when a task is part of an epic, migration, architecture rollout,
+  or multi-session project.
+- Do not create memory for small, self-contained edits that are fully captured
+  by the ticket, plan, prompt spec, and git diff.
 
-3. **Cập nhật Memory trước khi kết thúc**:
-   - Trước khi báo cáo "Đã xong" với User, AI cập nhật lại `AGENT_MEMORY.md` để đánh dấu tiến độ và lưu ý cho phiên làm việc sau.
+## What To Record
 
-## 3. Lợi ích đối với Agentic Harness
-- Mô hình này mô phỏng các kiến trúc Agentic tiên tiến như **Trellis** hay **Archon**, giúp biến AI từ một công cụ "hỏi-đáp" đơn thuần thành một thành viên nhóm phát triển có trí nhớ dài hạn (Long-term memory).
-- Giảm thiểu số lượng token cần thiết để giải thích lại vấn đề mỗi khi mở chat mới.
+- Current goal and scope.
+- Completed and in-progress work.
+- Product or architecture decisions that future agents must preserve.
+- Approved deviations from default rules.
+- Errors encountered and the fix that worked.
+- Validation commands and outcomes.
+- Next steps that are concrete enough for another agent to resume.
+
+## What Not To Record
+
+- Full chat transcripts.
+- Repeated copies of rulebook content.
+- Speculation that has not been accepted as a decision.
+- Sensitive data, secrets, tokens, credentials, or full payment card data.
+
+## Update Loop
+
+1. At task start, read the relevant memory file if it exists.
+2. During implementation, update memory immediately after important approved
+   decisions or non-obvious repair steps.
+3. Before final response, update memory when the work should carry into a later
+   session.
+4. Link related `thoughts/shared/01-tickets/`, `thoughts/shared/03-plans/`,
+   `prompt-spec.md`, and `feature-manifest.json` files instead of duplicating
+   them.
