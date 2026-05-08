@@ -5,7 +5,10 @@
 - `PendingAuthorize`: Waiting for provider/user authorization.
 - `Authorized`: Payment authorized but not yet captured.
 - `Captured`: Money successfully deducted.
-- `Settled`: Final terminal state for successful payment.
+- `Settled`: Final terminal state for a successful payment as reported by the
+  provider or reconciliation feed. This is a canonical state label only; the
+  Hub MUST NOT perform settlement, hold funds, or become the system of record
+  for merchant/customer fund movement.
 - `Failed`: Terminal state for failed attempts.
 - `Cancelled`: Terminal state for user/system cancellation.
 - `Refunding`: Partial/Full refund in progress.
@@ -21,6 +24,9 @@
 2. **Immutable Terminal States**: Once a transaction reaches `Settled`, `Failed`, `Cancelled`, or `Refunded`, NO further transitions are allowed.
 3. **Provider Mapping**: Every Adapter MUST implement `MapProviderStatus` to translate provider-specific codes to these canonical states.
 4. **Deposit Failure**: Internal deposit failure after authorization MUST emit `DepositFailed` and trigger provider refund, then transition to `Failed`.
+5. **Settlement Boundary**: Transitioning to `Settled` MUST be based on a
+   provider, tenant, or reconciliation signal. It MUST NOT initiate financial
+   settlement from the Hub.
 
 ## Implementation Explicitness
 - Use Event Sourcing. Every state change MUST be recorded as an immutable event in the Transaction Store (`EventType`, `EventData`, `Source`, `OccurredAt`, `CorrelationId`).

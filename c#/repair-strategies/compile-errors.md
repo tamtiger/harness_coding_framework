@@ -15,9 +15,9 @@
 - **CS0246 (Type or namespace not found)**:
   - *Fix*: Add missing `using` directives, verify NuGet package installation, or ensure the `.csproj` references the correct target project.
 - **CS0535 (Does not implement interface member)**:
-  - *Fix*: Ensure the Application Service or Repository fully implements all methods defined in its interface (e.g., `Contracts` project mismatch).
+  - *Fix*: Ensure the Application Service or Repository fully implements all methods defined in its interface (e.g., `Application.Contracts` project mismatch).
 - **Missing [Authorize] / Permission Errors**:
-  - *Fix*: Ensure permissions are explicitly defined in the `Contracts` project and properly checked via `[Authorize]` in the `Application` project.
+  - *Fix*: Ensure permissions are explicitly defined in the `Application.Contracts` project and properly checked via `[Authorize]` in the `Application` project.
 - **AutoMapper Profile Errors**:
   - *Fix*: Verify that DTOs match Domain entities. Ensure `CreateMap<Entity, DTO>()` is defined in the correct module's `Profile` class.
 - **Unit of Work Violations**:

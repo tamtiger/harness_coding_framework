@@ -18,14 +18,29 @@
 - **KMS / HSM**: For Secret Management (Vault or Azure Key Vault).
 - **Transaction Integrity Reconciliation**: Daily T+1 job to reconcile Hub state ↔ Provider ↔ Tenant.
 
+## Contract Rule Files
+- Public HTTP APIs: `api-contract-rules.md`
+- Kafka events and CloudEvents: `messaging-rules.md`
+- Transaction Store, Outbox, and Inbox persistence: `data-rules.md`
+
 ## Project Structure
 src/
+ ├── Harness.PaymentHub.Domain.Shared/ (Enums, constants, error codes, shared primitives)
  ├── Harness.PaymentHub.Domain/ (Entities, State Machine, Outbox/Inbox Interfaces)
+ ├── Harness.PaymentHub.Application.Contracts/ (DTOs, AppService interfaces, permissions)
  ├── Harness.PaymentHub.Application/ (Features, Orchestration, Notification)
  │    └── Features/ (Vertical Slices per feature)
  ├── Harness.PaymentHub.Adapters/ (Provider Implementations, Plugin Architecture)
  ├── Harness.PaymentHub.EntityFrameworkCore/ (SQL Server 2022, Transaction Store, Outbox/Inbox Schema)
- └── Harness.PaymentHub.HttpApi.Host/ (API Gateway, Ingress, Fallback Router)
+ ├── Harness.PaymentHub.HttpApi/ (Controllers and HTTP API contracts)
+ └── Harness.PaymentHub.HttpApi.Host/ (Composition root, API Gateway, Ingress, Fallback Router)
+
+test/
+ ├── Harness.PaymentHub.Domain.Tests/
+ ├── Harness.PaymentHub.Application.Tests/
+ ├── Harness.PaymentHub.EntityFrameworkCore.Tests/
+ ├── Harness.PaymentHub.HttpApi.Tests/
+ └── Harness.PaymentHub.ContractTests/ (Provider adapter and webhook contract tests)
 
 ## Tech Stack Note
 - **Database**: SQL Server 2022 (Project Specific).

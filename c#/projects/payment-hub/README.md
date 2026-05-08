@@ -35,6 +35,15 @@ Thư mục này chứa các quy tắc kiến trúc (Architectural Rules) và Rà
    - Quy chuẩn Distributed Tracing (truy vết `trace_id` xuyên suốt qua các components).
    - Các chỉ số đo lường hiệu năng (Golden Signals) và cấu hình Fallback Router (failover về hệ cũ <= 30s khi có sự cố).
 
+7. **[`api-contract-rules.md`](./api-contract-rules.md)**
+   - Versioning, required headers, error response shape, và error code catalog.
+
+8. **[`messaging-rules.md`](./messaging-rules.md)**
+   - CloudEvents envelope, Kafka topic naming, event type naming, partitioning, và Outbox publishing.
+
+9. **[`data-rules.md`](./data-rules.md)**
+   - Transaction Store, Outbox Store, Inbox Store, retention, và persistence guardrails.
+
 ---
 
 ## 🚀 Mục Tiêu Nền Tảng
@@ -53,3 +62,6 @@ Khi nhận Task liên quan đến việc triển khai tính năng mới hoặc s
 2. Kiểm tra các rào cản bảo mật tại `security-rules.md` (Đặc biệt cẩn trọng với Logging và Data Access).
 3. Bất kỳ API hoặc Webhook nào liên quan đến việc cập nhật trạng thái đều phải tuân thủ chuẩn Idempotency (`idempotency-rules.md`).
 4. Mọi cập nhật trạng thái giao dịch phải được thực hiện thông qua Outbox Pattern theo đúng vòng đời (`state-machine.md`).
+5. Mọi public API phải tuân thủ `api-contract-rules.md`.
+6. Mọi Kafka event phải tuân thủ `messaging-rules.md`.
+7. Mọi thay đổi persistence phải đối chiếu `data-rules.md`.
