@@ -48,7 +48,7 @@ Các stack khác có thể được thêm vào sau với cùng một cấu trúc
 
 ## Luồng Ngữ Cảnh (Context Workflow)
 
-Sử dụng thư mục `thoughts/` cho các công việc cần lưu trữ dài hạn (vượt qua phạm vi của một phiên chat).
+**Thoughts First (Bắt Buộc)**: Sử dụng thư mục `thoughts/` cho MỌI công việc (ngoại trừ các thay đổi cực nhỏ) để lưu lại lịch sử (history), kế hoạch và các quyết định thiết kế. Điều này giúp duy trì ngữ cảnh xuyên suốt các phiên chat.
 
 ```text
 thoughts/
@@ -65,7 +65,7 @@ thoughts/
 
 Tất cả file trong `shared/` phải đặt tên theo format `YYYYMMDD_HHMM_task-name.md` (ví dụ: `20260508_1335_harness-phase2-plan.md`). Chi tiết xem tại [thoughts/README.md](thoughts/README.md).
 
-Quy trình (flow) được khuyến nghị:
+Quy trình (flow) bắt buộc (Mandatory):
 
 1. Tạo một Ticket từ `thoughts/templates/ticket-template.md`.
 2. Tạo một Plan từ `thoughts/templates/plan-template.md`.
@@ -75,7 +75,7 @@ Quy trình (flow) được khuyến nghị:
 
 Kế hoạch cải tiến harness hiện tại đang được theo dõi tại:
 - Phase 1: [20260508_0931_harness-improvement-plan.md](thoughts/shared/03-plans/20260508_0931_harness-improvement-plan.md) ✅ Hoàn tất
-- Phase 2: [20260508_1335_harness-phase2-plan.md](thoughts/shared/03-plans/20260508_1335_harness-phase2-plan.md) 🔄 Đang triển khai
+- Phase 2: [20260508_1335_harness-phase2-plan.md](thoughts/shared/03-plans/20260508_1335_harness-phase2-plan.md) ✅ Hoàn tất
 
 ## Khởi Tạo Tính Năng C# (C# Feature Generation)
 
