@@ -22,6 +22,7 @@ Trước khi viết code, thay đổi kiến trúc hoặc trả lời các câu 
 | **Làm việc với Confluence** (sync, publish doc) | `integrations/confluence.md` |
 | **Làm việc với GitLab** (branch, commit, MR) | `integrations/gitlab.md` |
 | **Luồng liên nền tảng** (Jira ↔ Confluence ↔ GitLab) | `integrations/workflows.md` |
+| **Quy trình EPCC** (Explore-Plan-Code-Check) | `thoughts/workflows/epcc.md` |
 
 Các rulebook của stack định nghĩa baseline về kiến trúc, ranh giới phụ thuộc (dependency boundaries), quy tắc đặt tên, testing, CI, và quy trình của agent. Các rulebook của dự án định nghĩa các quyết định đặc thù cho sản phẩm như database engine, messaging, bảo mật, observability, máy trạng thái (state machines), các adapter bên ngoài và quy trình vận hành.
 
@@ -40,7 +41,7 @@ Hãy sử dụng repository này như một hệ thống "Kỹ sư ngữ cảnh"
 
 1. Xác định phạm vi (scope): stack, project, module, tính năng, hành động và các layer bị ảnh hưởng.
 2. Chỉ tải (load) các rulebook cần thiết cho phạm vi đó.
-3. **Thoughts First (Bắt Buộc)**: Đối với MỌI công việc không nhỏ (non-trivial), agent PHẢI tạo hoặc cập nhật ticket trong `thoughts/shared/01-tickets/` và plan trong `thoughts/shared/03-plans/` TRƯỚC KHI viết code. Chỉ được bỏ qua bước này khi tác vụ là sửa lỗi nhỏ (< 3 files), cập nhật tài liệu đơn lẻ, hoặc con người yêu cầu rõ ràng bỏ qua.
+3. **Thoughts First (Bắt Buộc)**: Tuân thủ quy trình **EPCC** (`thoughts/workflows/epcc.md`). Đối với MỌI công việc không nhỏ (non-trivial), agent PHẢI tạo hoặc cập nhật ticket trong `thoughts/shared/01-tickets/` và plan trong `thoughts/shared/03-plans/` TRƯỚC KHI viết code. Chỉ được bỏ qua bước này khi tác vụ là sửa lỗi nhỏ (< 3 files), cập nhật tài liệu đơn lẻ, hoặc con người yêu cầu rõ ràng bỏ qua.
 4. Đối với việc phát triển tính năng C#, tạo hoặc cập nhật `prompt-spec.md` trước khi bắt tay vào triển khai.
 5. Giữ file `feature-manifest.json` luôn đồng bộ với các dependencies, quyền hạn (permissions), events, các layer bị chạm đến và trạng thái `ai_status`.
 6. Tự động kiểm tra với các script build, tests và script harness validation phù hợp trước khi báo cáo hoàn thành.
@@ -52,5 +53,5 @@ Hãy sử dụng repository này như một hệ thống "Kỹ sư ngữ cảnh"
 - Không được refactor các file không liên quan hoặc vượt qua ranh giới module nếu tác vụ không yêu cầu.
 - Không được đưa ra các quyết định về cơ sở hạ tầng đặc thù của sản phẩm nếu nó không nằm trong rulebook của dự án đó.
 - **Không được tạo Jira ticket hoặc commit code lên GitLab mà không qua Quality Gate** — xem `integrations/jira.md` và `integrations/gitlab.md`.
-- **QUAN TRỌNG: TUYỆT ĐỐI KHÔNG commit code lên `main` hoặc tạo Merge Request** — luôn yêu cầu human review trước.
+- **QUAN TRỌNG**: TUYỆT ĐỐI KHÔNG push/commit trực tiếp lên `main`, KHÔNG tự merge hoặc approve MR của chính mình. Agent ĐƯỢC tạo MR (sau khi qua local validation) nhưng MR luôn phải có human review trước khi merge.
 - Giữ file này ngắn gọn. Các quy tắc chi tiết phải nằm trong rulebooks của stack/project, workflows, templates, hoặc các scripts mà agent có thể gọi tải theo nhu cầu (on demand).

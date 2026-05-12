@@ -1,6 +1,6 @@
 # Không Gian Tư Duy (Thoughts Workspace)
 
-Thư mục `thoughts/` lưu trữ các tài liệu (artifacts) kỹ thuật ngữ cảnh, giúp các AI Agent và con người có thể tiếp tục công việc xuyên suốt qua nhiều phiên làm việc (sessions) khác nhau mà không làm quá tải các file chỉ thị gốc.
+Thư mục `thoughts/` lưu trữ các tài liệu (artifacts) kỹ thuật ngữ cảnh, giúp các AI Agent và con người có thể tiếp tục công việc xuyên suốt qua nhiều phiên làm việc (sessions) khác nhau mà không làm quá tải các file chỉ thị gốc. Quy trình cốt lõi tại đây là **EPCC** (xem chi tiết tại `workflows/epcc.md`).
 
 ## Quy Tắc Đặt Tên File (File Naming Convention)
 

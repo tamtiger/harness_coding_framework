@@ -65,13 +65,12 @@ thoughts/
 
 Tất cả file trong `shared/` phải đặt tên theo format `YYYYMMDD_HHMM_task-name.md` (ví dụ: `20260508_1335_harness-phase2-plan.md`). Chi tiết xem tại [thoughts/README.md](thoughts/README.md).
 
-Quy trình (flow) bắt buộc (Mandatory):
+Quy trình (flow) bắt buộc **EPCC** (Mandatory):
 
-1. Tạo một Ticket từ `thoughts/templates/ticket-template.md`.
-2. Tạo một Plan từ `thoughts/templates/plan-template.md`.
-3. Bắt tay vào viết code theo đúng Plan đã được duyệt.
-4. Đối với các tính năng C#, tạo mới hoặc cập nhật `prompt-spec.md` và `feature-manifest.json`.
-5. Chạy test (validate) và cập nhật checklist trong Plan trước khi báo xong.
+1. **Explore**: Tạo một Ticket từ `thoughts/templates/ticket-template.md` và làm rõ yêu cầu.
+2. **Plan**: Tạo một Plan từ `thoughts/templates/plan-template.md` với các task nhỏ.
+3. **Code**: Triển khai theo TDD (test trước, code sau). Đối với C#, cập nhật `prompt-spec.md` và `feature-manifest.json`.
+4. **Check**: Chạy validation script, verify toàn bộ và cập nhật checklist/changelog.
 
 Kế hoạch cải tiến harness hiện tại đang được theo dõi tại:
 - Phase 1: [20260508_0931_harness-improvement-plan.md](thoughts/shared/03-plans/20260508_0931_harness-improvement-plan.md) ✅ Hoàn tất

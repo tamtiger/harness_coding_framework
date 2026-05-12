@@ -11,11 +11,14 @@ Describe the stack, project, module, feature, and expected outcome.
 - `{StackReadme}`
 - `{ProjectRulebookWhenApplicable}`
 
-## Implementation Steps
-1. Inspect the current structure and identify affected files.
-2. Update or create required specs, manifests, docs, scripts, or code.
-3. Run focused validation.
-4. Record residual risks and follow-up work.
+## Implementation Steps (Tuân thủ EPCC)
+1. **Explore**: Nghiên cứu cấu trúc hiện tại, xác định các file bị ảnh hưởng và làm rõ yêu cầu.
+2. **Plan**: Chia nhỏ công việc thành các task mini (danh sách dưới đây).
+3. **Code (TDD)**:
+   - Viết unit test/integration test.
+   - Triển khai logic để pass test.
+   - Refactor và tối ưu hóa.
+4. **Check**: Chạy validation script, verify toàn bộ thay đổi và cập nhật manifest/changelog.
 
 ## Files Expected To Change
 - `{path}`

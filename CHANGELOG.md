@@ -3,6 +3,18 @@
 Tất cả thay đổi đáng chú ý của harness này được ghi nhận tại đây. Định dạng dựa
 trên [Keep a Changelog](https://keepachangelog.com/).
 
+## [harness-epcc] Tích hợp quy trình EPCC (Explore-Plan-Code-Check) - 2026-05-12
+
+### Added
+- `thoughts/workflows/epcc.md` — Định nghĩa chi tiết quy trình 4 bước cho AI Agent.
+
+### Changed
+- `AGENTS.md` — Bắt buộc tuân thủ quy trình EPCC trong mục Agent Workflow và bổ sung vào bảng Routing.
+- `README.md` (root) — Cập nhật mục "Context Workflow" theo quy trình EPCC.
+- `thoughts/README.md` — Link tới tài liệu EPCC.
+- `thoughts/templates/plan-template.md` — Cập nhật cấu trúc Implementation Steps theo chuẩn EPCC.
+- Tạo Ticket và Plan lưu vết cho việc triển khai EPCC.
+
 ## [harness-003] Làm Rõ Hai Loại Error Code (Internal vs Public API) - 2026-05-12
 
 ### Changed
