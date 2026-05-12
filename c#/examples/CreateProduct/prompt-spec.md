@@ -50,6 +50,18 @@ the tenant, a valid price in VND (no decimals), and an initial status of
   `Catalog:Product:0002` (`PriceTooLow`).
 - Product name must not be empty or whitespace.
 
+## Error Code Mapping (Internal → Public API)
+
+| Internal Domain Code | HTTP Status | Public API Code | When |
+| --- | --- | --- | --- |
+| `Catalog:Product:0001` | 409 Conflict | `catalog.sku_conflict` | SKU already exists for tenant |
+| `Catalog:Product:0002` | 400 Bad Request | `catalog.price_too_low` | Price < 1,000 VND |
+
+The internal code is thrown via `BusinessException` in the Application/Domain
+layer. ABP middleware maps it to the public API code in the HTTP response body.
+Clients see only the public code (e.g., `catalog.sku_conflict`), never the
+internal format.
+
 ## Security And Compliance
 - Requires permission: `Catalog.Product.Create`.
 - Tenant isolation: product belongs to `ICurrentTenant.Id`.
@@ -83,10 +95,10 @@ the tenant, a valid price in VND (no decimals), and an initial status of
 
 ## Acceptance Criteria
 - Creating a product with valid data returns 201 with the product DTO.
-- Creating a product with a duplicate SKU returns 409 with error code
-  `Catalog:Product:0001`.
-- Creating a product with price below 1,000 VND returns 400 with error code
-  `Catalog:Product:0002`.
+- Creating a product with a duplicate SKU returns 409 with public API error code
+  `catalog.sku_conflict` (internal: `Catalog:Product:0001`).
+- Creating a product with price below 1,000 VND returns 400 with public API
+  error code `catalog.price_too_low` (internal: `Catalog:Product:0002`).
 - Creating a product without `Catalog.Product.Create` permission returns 403.
 - `ProductCreatedEto` is published after successful creation.
 

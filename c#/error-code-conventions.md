@@ -1,8 +1,51 @@
 # Error Code Conventions
 
-## Naming Pattern
+## Two Layers of Error Codes
 
-Error codes follow the format:
+This harness distinguishes **two separate concerns** for error codes:
+
+| Layer | Purpose | Format | Where Defined |
+| --- | --- | --- | --- |
+| **Internal Domain Error Code** | Thrown inside C# code via `BusinessException` | `{Module}:{Entity}:{NumericCode}` | `{Module}.Domain.Shared/{Module}ErrorCodes.cs` |
+| **Public API Error Code** | Returned to HTTP clients in the response body | Project-specific (e.g., `payment_hub.snake_case`) | Project `api-contract-rules.md` |
+
+**Key rule**: Code throws the *internal* error code. ABP middleware or a custom
+mapper translates it to the *public* API error code before the response leaves
+the server. Clients never see the internal format.
+
+### Mapping Flow
+
+```
+Domain / Application Layer          HTTP Pipeline              Client
+─────────────────────────────       ──────────────────         ──────────
+throw BusinessException             ABP Exception-to-HTTP      JSON body
+  code: "PaymentHub:Transaction:0001"  ──► maps to ──►        "payment_hub.transaction_not_found"
+  HTTP 404                                                     HTTP 404
+```
+
+ABP performs the mapping via `IHttpExceptionStatusCodeFinder` and the module's
+error-code-to-HTTP-status configuration. Projects MAY add a custom middleware or
+`IExceptionToErrorInfoConverter` to control the public `code` field in the JSON
+envelope.
+
+### Project-Specific Overrides
+
+Each project MAY define its own **public API error code format** in its
+`api-contract-rules.md`. When a project-specific rule exists, it takes
+precedence over the generic format for the public-facing layer (see
+`AGENTS.md` — "project-specific rules take precedence").
+
+The **internal domain error code format** (`{Module}:{Entity}:{NumericCode}`)
+remains mandatory for all projects unless the project rulebook explicitly
+documents an override with justification.
+
+---
+
+## Internal Domain Error Code
+
+### Naming Pattern
+
+Internal error codes follow the format:
 
 ```
 {Module}:{Entity}:{NumericCode}
@@ -92,10 +135,49 @@ Never use:
 - `throw new ApplicationException("...")`
 - Inline string error codes (must reference the `ErrorCodes` class)
 
+## End-to-End Example (Internal → Public)
+
+Below is a complete example showing how an internal domain error code maps to a
+public API error code for the Catalog module:
+
+```csharp
+// 1. Define internal error code in Domain.Shared
+public static class CatalogErrorCodes
+{
+    public const string SkuAlreadyExists = "Catalog:Product:0001";
+    public const string PriceTooLow = "Catalog:Product:0002";
+}
+
+// 2. Throw in Application/Domain layer
+throw new BusinessException(CatalogErrorCodes.SkuAlreadyExists)
+    .WithData("sku", request.Sku);
+```
+
+```json
+// 3. Client receives public API error code (after ABP mapping)
+// HTTP 409 Conflict
+{
+  "error": {
+    "code": "catalog.sku_conflict",
+    "message": "A product with this SKU already exists.",
+    "traceId": "abc123"
+  }
+}
+```
+
+The mapping between `Catalog:Product:0001` (internal) and `catalog.sku_conflict`
+(public) is configured in the module's HTTP pipeline — either via ABP's built-in
+exception mapping or a custom `IExceptionToErrorInfoConverter`.
+
 ## Agent Checklist
 - Define error codes in `Domain.Shared` before using them.
-- Use the `{Module}:{Entity}:{NumericCode}` format consistently.
+- Use the `{Module}:{Entity}:{NumericCode}` format for **internal** codes.
 - Reserve numeric ranges per entity to avoid collisions.
 - Reference error code constants, never inline strings.
 - Map error codes to HTTP status codes in the module configuration or let ABP
   handle defaults.
+- Understand that **public API error codes** (client-facing) are a separate
+  concern defined in the project's `api-contract-rules.md`.
+- When implementing a feature, define both: the internal throw code AND the
+  public API code that clients will see.
+- Consult the project-specific `api-contract-rules.md` for the public format.

@@ -24,12 +24,15 @@ Read these files before designing or changing implementation files:
 4. `c#/architecture-rules.md`
 5. `c#/dependency-rules.md`
 6. `c#/naming-conventions.md`
-7. `c#/api-contract-rules.md`
-8. `c#/testing-rules.md`
-9. `c#/ci-rules.md`
-10. `c#/anti-patterns.md`
-11. `c#/feature-template.md`
-12. `c#/prompt-spec-template.md`
+7. `c#/error-code-conventions.md`
+8. `c#/api-contract-rules.md`
+9. `c#/testing-rules.md`
+10. `c#/ci-rules.md`
+11. `c#/anti-patterns.md`
+12. `c#/feature-template.md`
+13. `c#/prompt-spec-template.md`
+14. `c#/examples/CreateProduct/` (reference exemplar for prompt-spec + manifest
+    + error code mapping pattern)
 
 If the work belongs to a concrete project, also read
 `c#/projects/{ProjectName}/README.md` and every project-specific rule file that
@@ -108,6 +111,24 @@ Set `ai_status` to:
 - Throw ABP `BusinessException` for business-rule failures.
 - Keep DTOs and AppService contracts out of the Application implementation
   project.
+
+## Error Code Handling
+
+Every feature that can fail with a business rule violation MUST define error
+codes at **two layers**:
+
+1. **Internal domain error code** — define in `{Module}.Domain.Shared/{Module}ErrorCodes.cs`
+   using format `{Module}:{Entity}:{NumericCode}` BEFORE throwing. Always throw
+   via `new BusinessException(ErrorCodeConstant)`.
+2. **Public API error code** — define in the project's `api-contract-rules.md`
+   (e.g., `payment_hub.transaction_not_found`). This is the code clients see in
+   the HTTP response body.
+
+The mapping from internal → public is configured in the module's HTTP pipeline
+(ABP `IHttpExceptionStatusCodeFinder` or custom middleware). See
+`c#/error-code-conventions.md` § "Two Layers of Error Codes" for the full
+pattern and `c#/examples/CreateProduct/prompt-spec.md` § "Error Code Mapping"
+for a concrete example.
 
 ## Project-Specific Decisions
 

@@ -3,6 +3,20 @@
 Tất cả thay đổi đáng chú ý của harness này được ghi nhận tại đây. Định dạng dựa
 trên [Keep a Changelog](https://keepachangelog.com/).
 
+## [harness-003] Làm Rõ Hai Loại Error Code (Internal vs Public API) - 2026-05-12
+
+### Changed
+- `c#/error-code-conventions.md` — thêm section "Two Layers of Error Codes"
+  phân biệt rõ Internal Domain Error Code vs Public API Error Code, bao gồm
+  mapping flow diagram, project-specific overrides, và end-to-end example.
+- `c#/projects/payment-hub/api-contract-rules.md` — thêm Scope Note ở đầu file
+  giải thích đây là public API error codes (không phải internal
+  `BusinessException` codes) và reference về generic rule.
+- `c#/examples/CreateProduct/prompt-spec.md` — thêm "Error Code Mapping" table
+  thể hiện ánh xạ internal → public API code, cập nhật Acceptance Criteria.
+- `c#/prompts/feature-generator.md` — thêm `c#/error-code-conventions.md` vào
+  Required Context Loading list (item #7).
+
 ## [Phase 2] - 2026-05-08
 
 ### Added

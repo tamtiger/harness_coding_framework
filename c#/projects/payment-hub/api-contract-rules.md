@@ -1,5 +1,18 @@
 # Payment Hub: API Contract Rules
 
+> **Scope Note**: This file defines the **public API error codes** — the codes
+> that HTTP clients and tenant SDKs see in response bodies. These are NOT the
+> same as the internal `BusinessException` error codes thrown in C# code.
+>
+> - Internal domain error codes (e.g., `PaymentHub:Transaction:0001`) are
+>   defined per the generic rule at `c#/error-code-conventions.md`.
+> - Public API error codes (e.g., `payment_hub.invalid_state_transition`) are
+>   the client-facing contract defined below.
+> - ABP middleware maps internal → public before the response leaves the server.
+>
+> See `c#/error-code-conventions.md` § "Two Layers of Error Codes" for the full
+> explanation and mapping flow.
+
 ## Versioning
 - Public HTTP APIs MUST be versioned with `/api/payment-hub/v{version}/`.
 - Phase 1 uses `v1`.
