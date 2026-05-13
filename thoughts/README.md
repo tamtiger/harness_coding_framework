@@ -30,6 +30,7 @@ thoughts/
       ├── ticket-template.md
       ├── plan-template.md
       ├── research-template.md
+      ├── repo-summary-template.md
       └── agent-memory-template.md
 ```
 
@@ -37,6 +38,20 @@ thoughts/
 
 - Sử dụng `shared/01-tickets/` cho các yêu cầu tính năng (feature requests), báo lỗi (bugs), và các tác vụ về kiến trúc.
 - Sử dụng `shared/03-plans/` cho các bản kế hoạch triển khai chi tiết cần được duyệt (review) trước khi tiến hành sửa đổi mã nguồn.
-- Sử dụng `shared/02-research/` cho các nghiên cứu về hệ thống hiện tại hoặc nghiên cứu công nghệ bên ngoài có khả năng tái sử dụng.
+- Sử dụng `shared/02-research/` cho các nghiên cứu về hệ thống hiện tại hoặc nghiên cứu công nghệ bên ngoài có khả năng tái sử dụng. Cũng dùng để lưu **source tree & summary** của các repo (xem template `repo-summary-template.md`).
 - Cần ghi lại thông tin một cách cụ thể: lưu lại chính xác stack, project, module, các quyết định kiến trúc, rủi ro dự kiến và các câu lệnh kiểm thử (validation commands).
 - Đối với việc phát triển tính năng C#, file Plan sau khi được duyệt cần chứa liên kết trỏ tới file `prompt-spec.md` và `feature-manifest.json` của tính năng đó.
+
+## Sinh Source Tree Cho Repo (Generate Source Tree)
+
+Sử dụng script `scripts/generate-source-tree.ps1` để sinh cấu trúc thư mục dạng Markdown:
+
+```powershell
+# In ra stdout với header
+.\scripts\generate-source-tree.ps1 -Path "C:\path\to\repo" -Depth 3 -IncludeSummaryHeader
+
+# Lưu vào file trong thoughts/shared/02-research/
+.\scripts\generate-source-tree.ps1 -Path . -OutputFile "thoughts/shared/02-research/YYYYMMDD_HHMM_repo-name-source-tree.md" -IncludeSummaryHeader
+```
+
+Kết hợp với template `thoughts/templates/repo-summary-template.md` để tạo file summary đầy đủ (purpose, tech stack, modules, entry points, dependencies).

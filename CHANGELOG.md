@@ -3,6 +3,16 @@
 Tất cả thay đổi đáng chú ý của harness này được ghi nhận tại đây. Định dạng dựa
 trên [Keep a Changelog](https://keepachangelog.com/).
 
+## [harness-source-tree] Script sinh Source Tree & Repo Summary - 2026-05-13
+
+### Added
+- `scripts/generate-source-tree.ps1` — Script PowerShell sinh source tree dạng Markdown từ bất kỳ repo Git nào. Hỗ trợ: custom depth, exclude dirs, output file, summary header.
+- `thoughts/templates/repo-summary-template.md` — Template chuẩn cho file summary repo (purpose, tech stack, modules, entry points, tree, build commands).
+- `thoughts/shared/02-research/20260513_1000_harness-repo-source-tree.md` — Ví dụ áp dụng cho chính repo `harness_coding_framework`.
+
+### Changed
+- `README.md` (root) — Cập nhật Repository Map thêm entry cho `generate-source-tree.ps1`.
+
 ## [harness-epcc] Tích hợp quy trình EPCC (Explore-Plan-Code-Check) - 2026-05-12
 
 ### Added

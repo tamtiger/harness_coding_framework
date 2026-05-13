@@ -27,6 +27,7 @@ Luồng làm việc của Agent:
 | `c#/projects/payment-hub/` | Rulebook đặc thù cho dự án Payment Hub |
 | `thoughts/` | Workspace chứa templates và các file Tickets, Plans, Research, Memory |
 | `scripts/validate-harness.ps1` | Script kiểm tra tính hợp lệ của metadata và rulebooks |
+| `scripts/generate-source-tree.ps1` | Script sinh source tree (cấu trúc thư mục) dạng Markdown cho bất kỳ repo Git nào |
 
 ## Các Stack Được Hỗ Trợ (Supported Stack)
 
